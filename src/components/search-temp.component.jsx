@@ -12,6 +12,7 @@ class SearchBar extends Component {
     minTemp: undefined,
     maxTemp: undefined,
     description: undefined,
+    error: false,
   };
 
   getWeather = async (e) => {
@@ -20,27 +21,39 @@ class SearchBar extends Component {
     const city = e.target.cityName.value;
     const country = e.target.countryName.value;
 
-    const api_call = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}`
+    if (city && country) {
+      this.setState({ error: false });
+      const api_call = await fetch(
+        `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}`
+      );
+
+      const response = await api_call.json();
+
+      this.setState({
+        city: `${response.name}, ${response.sys.country}`,
+        temperature: response.main.temp,
+        minTemp: response.main.temp_min,
+        maxTemp: response.main.temp_max,
+        description: response.weather[0].description,
+      });
+    } else this.setState({ error: true });
+  };
+
+  showError = (error) => {
+    return (
+      <div className="alert alert-danger" role="alert">
+        No city and country names were entered
+      </div>
     );
-
-    const response = await api_call.json();
-
-    this.setState({
-      city: `${response.name}, ${response.sys.country}`,
-      temperature: response.main.temp,
-      minTemp: response.main.temp_min,
-      maxTemp: response.main.temp_max,
-      description: response.weather[0].description,
-    });
-
-    console.log(response);
   };
 
   render() {
     return (
       <div className="container mt-5">
-        <form className="form-inline" onSubmit={this.getWeather}>
+        <form className="form" onSubmit={this.getWeather}>
+          <div className="form-group">
+            {this.state.error && this.showError()}
+          </div>
           <div className="form-group">
             <div className="row text-center">
               <div className="col-md-5">
