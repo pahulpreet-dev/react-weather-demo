@@ -31,13 +31,15 @@ class SearchBar extends Component {
 
       this.setState({
         city: `${response.name}, ${response.sys.country}`,
-        temperature: response.main.temp,
-        minTemp: response.main.temp_min,
-        maxTemp: response.main.temp_max,
+        temperature: this.getCelcius(response.main.temp),
+        minTemp: this.getCelcius(response.main.temp_min),
+        maxTemp: this.getCelcius(response.main.temp_max),
         description: response.weather[0].description,
       });
     } else this.setState({ error: true });
   };
+
+  getCelcius = (temp) => (temp = (temp - 273).toFixed(0));
 
   showError = (error) => {
     return (

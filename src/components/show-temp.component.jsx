@@ -12,19 +12,24 @@ class ShowTemp extends Component {
           </h1>
         </div>
         <div className="row">
-          <img className="text-center container-fluid py-3" name="icon"></img>
+          {this.props.temperature && (
+            <h3 className="text-center container-fluid py-3" name="temp">
+              {this.props.temperature}&deg;C
+            </h3>
+          )}
         </div>
-        <div className="row">
-          <h3 className="text-center container-fluid py-3" name="temp">
-            {this.props.temperature}
-          </h3>
-        </div>
-        <div className="row">
-          <h4 className="text-center container-fluid py-3 col-md-6" name="min">
-            {this.props.minTemp}
-          </h4>
-          <h4 className="text-center container-fluid py-3 col-md-6" name="max">
-            {this.props.maxTemp}
+        <div className="row container-fluid">
+          <h4 className="text-center container-fluid py-3">
+            {this.props.minTemp && (
+              <span className="mx-5" name="min">
+                {this.props.minTemp}&deg;C
+              </span>
+            )}
+            {this.props.maxTemp && (
+              <span className="mx-4" name="max">
+                {this.props.maxTemp}&deg;C
+              </span>
+            )}
           </h4>
         </div>
         <div className="row">
